@@ -20,23 +20,23 @@ public class UserRequestDTO implements Serializable {
 		this.address = address;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public void setJob(String job) {
-		this.job = job;
+	public String getJob() {
+		return job;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public String getAddress() {
+		return address;
 	}
 }

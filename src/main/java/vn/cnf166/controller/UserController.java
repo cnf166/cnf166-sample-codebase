@@ -3,12 +3,15 @@ package vn.cnf166.controller;
 import org.springframework.web.bind.annotation.*;
 import vn.cnf166.dto.request.UserRequestDTO;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 
 public class UserController {
 
-	@PostMapping("/")
+	//@PostMapping("/")
+	@RequestMapping(method = RequestMethod.POST, path = "/", headers = "apiKey=v1.0")
 	public String addUser(@RequestBody UserRequestDTO userDTO) {
 		return "Added user successfully!";
 	}
@@ -32,5 +35,20 @@ public class UserController {
 		return "Delete user successfully";
 	}
 
+	@GetMapping("/{userId}")
+	public UserRequestDTO getUser(@PathVariable int userId) {
+		System.out.println("Request get user by userId: " + userId);
+		return new UserRequestDTO("Viet Anh", "Nguyen", "Student", "09xxxx", "Nam Tu Liem");
+	}
+
+	@GetMapping("/users_list")
+	public List<UserRequestDTO> getAllUserList(
+			@RequestParam(required = false) String phone,
+			@RequestParam(defaultValue = "1") int pageNumber,
+			@RequestParam(defaultValue = "20") int pageSize) {
+		System.out.println("Request get all users: ");
+		return List.of(new UserRequestDTO("Viet Anh", "Nguyen", "Student", "09xxxx", "Nam Tu Liem"),
+				new UserRequestDTO("Anh Anh", "Nguyen", "Student", "09xxxx", "Nam Tu Liem"));
+	}
 
 }
