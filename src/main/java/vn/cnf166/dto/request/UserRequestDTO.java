@@ -3,7 +3,9 @@ package vn.cnf166.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import vn.cnf166.util.EnumPattern;
 import vn.cnf166.util.PhoneNumber;
+import vn.cnf166.util.UserStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -23,6 +25,9 @@ public class UserRequestDTO implements Serializable {
 	@PhoneNumber
 	private String phone;
 
+	@EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE", message = "status invalid format")
+	private UserStatus status;
+
 	@NotNull(message = "addresses can not empty")
 	private String address;
 
@@ -37,11 +42,12 @@ public class UserRequestDTO implements Serializable {
 	public UserRequestDTO() {
 	}
 
-	public UserRequestDTO(String firstName, String lastName, String email, String phone, String address, Date dateOfBirth, List<String> role) {
+	public UserRequestDTO(String firstName, String lastName, String email, String phone, UserStatus status, String address, Date dateOfBirth, List<String> role) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.phone = phone;
+		this.status = status;
 		this.address = address;
 		this.dateOfBirth = dateOfBirth;
 		this.role = role;
@@ -101,5 +107,13 @@ public class UserRequestDTO implements Serializable {
 
 	public void setRole(List<String> role) {
 		this.role = role;
+	}
+
+	public UserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatus status) {
+		this.status = status;
 	}
 }
