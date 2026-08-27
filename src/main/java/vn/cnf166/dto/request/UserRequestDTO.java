@@ -34,6 +34,10 @@ public class UserRequestDTO implements Serializable {
 	@NotNull(message = "addresses can not empty")
 	private String address;
 
+	@NotNull(message = "type must be not null")
+	@EnumValue(name = "type", enumClass = UserType.class)
+	private String userType;
+
 	@NotNull(message = "dateOfBirth must be not null")
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	@JsonFormat(pattern = "MM/dd/yyyy")
@@ -45,13 +49,14 @@ public class UserRequestDTO implements Serializable {
 	public UserRequestDTO() {
 	}
 
-	public UserRequestDTO(String firstName, String lastName, String email, String phone, UserStatus status, Gender gender, String address, Date dateOfBirth, List<String> role) {
+	public UserRequestDTO(String firstName, String lastName, String email, String phone, UserStatus status, Gender gender, String userType, String address, Date dateOfBirth, List<String> role) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.phone = phone;
-		this.gender = gender;
 		this.status = status;
+		this.gender = gender;
+		this.userType = userType;
 		this.address = address;
 		this.dateOfBirth = dateOfBirth;
 		this.role = role;
@@ -127,5 +132,13 @@ public class UserRequestDTO implements Serializable {
 
 	public void setGender(Gender gender) {
 		this.gender = gender;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 }
