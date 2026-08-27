@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 import vn.cnf166.dto.request.UserRequestDTO;
+import vn.cnf166.util.Gender;
 import vn.cnf166.util.UserStatus;
 
 import java.util.Date;
@@ -42,7 +43,7 @@ public class UserController {
 	@GetMapping("/{userId}")
 	public UserRequestDTO getUser(@PathVariable int userId) {
 		System.out.println("Request get user by userId: " + userId);
-		return new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, "Nam Tu Liem", new Date(), List.of("ABC", "XYZ"));
+		return new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.FEMALE, "Nam Tu Liem", new Date(), List.of("ABC", "XYZ"));
 	}
 
 	@GetMapping("/users_list")
@@ -51,8 +52,8 @@ public class UserController {
 			@RequestParam(defaultValue = "1") int pageNumber,
 			@RequestParam(defaultValue = "20") int pageSize) {
 		System.out.println("Request get all users: ");
-		return List.of(new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.ACTIVE, "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")),
-				new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")));
+		return List.of(new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.ACTIVE, Gender.MALE, "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")),
+				new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.OTHER, "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")));
 	}
 
 }
