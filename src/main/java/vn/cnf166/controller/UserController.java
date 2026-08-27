@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vn.cnf166.dto.request.UserRequestDTO;
+import vn.cnf166.dto.response.ResponseData;
 import vn.cnf166.dto.response.ResponseSuccess;
 import vn.cnf166.util.Gender;
 import vn.cnf166.util.UserStatus;
@@ -18,44 +19,52 @@ import java.util.List;
 @Validated
 public class UserController {
 
+	// Response based on ResponseEntity
+//	@PostMapping("/add")
+//	//@RequestMapping(method = RequestMethod.POST, path = "/", headers = "apiKey=v1.0")
+//	public ResponseSuccess addUser(@Valid @RequestBody UserRequestDTO userDTO) {
+//		return new ResponseSuccess(HttpStatus.CREATED, "Added user successfully!", 1);
+//	}
+
 	@PostMapping("/add")
 	//@RequestMapping(method = RequestMethod.POST, path = "/", headers = "apiKey=v1.0")
-	public ResponseSuccess addUser(@Valid @RequestBody UserRequestDTO userDTO) {
-		return new ResponseSuccess(HttpStatus.CREATED, "Added user successfully!", 1);
+	public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
+		return new ResponseData<>(HttpStatus.CREATED.value(), "Added user successfully!", 1);
 	}
 
+
 	@PutMapping("/{userId}")
-	public ResponseSuccess updateUser(@PathVariable int userId, @RequestBody UserRequestDTO userDTO) {
+	public ResponseData<?> updateUser(@PathVariable int userId, @RequestBody UserRequestDTO userDTO) {
 		System.out.println("Update user with userid = " + userId);
-		return new ResponseSuccess(HttpStatus.ACCEPTED, "Updated user successfully!");
+		return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Updated user successfully!");
 	}
 
 	@PatchMapping("/{userId}")
-	public ResponseSuccess changeStatusUser(@Min(1) @PathVariable int userId, @Min(1) @RequestParam(required = false) boolean status) //required = false --> non-mandatory
+	public ResponseData<?> changeStatusUser(@Min(1) @PathVariable int userId, @Min(1) @RequestParam(required = false) boolean status) //required = false --> non-mandatory
 	{
 		System.out.println("Change status user with userId =" + userId);
-		return new ResponseSuccess(HttpStatus.ACCEPTED, "Change status user successfully!");
+		return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Change status user successfully!");
 	}
 
 	@DeleteMapping("/{userId}")
-	public ResponseSuccess deleteUser(@Min(1) @PathVariable int userId) {
+	public ResponseData<?> deleteUser(@Min(1) @PathVariable int userId) {
 		System.out.println("Delete user with userId = " + userId);
-		return new ResponseSuccess(HttpStatus.NO_CONTENT, "Delete user successfully");
+		return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete user successfully");
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseSuccess getUser(@PathVariable int userId) {
+	public ResponseData<?> getUser(@PathVariable int userId) {
 		System.out.println("Request get user by userId: " + userId);
-		return new ResponseSuccess(HttpStatus.OK, "Get user by id: ", new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.FEMALE, "",  "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")));
+		return new ResponseData<>(HttpStatus.OK.value(), "Get user by id: ", new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.FEMALE, "",  "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")));
 	}
 
 	@GetMapping("/users_list")
-	public ResponseSuccess getAllUserList(
+	public ResponseData<?> getAllUserList(
 			@RequestParam(required = false) String phone,
 			@RequestParam(defaultValue = "1") int pageNumber,
 			@RequestParam(defaultValue = "20") int pageSize) {
 		System.out.println("Request get all users: ");
-		return new ResponseSuccess(HttpStatus.OK, "Get users: ", List.of(new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.ACTIVE, Gender.MALE, "UserType.MEMBER", "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")),
+		return new ResponseData<>(HttpStatus.OK.value(), "Get users: ", List.of(new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.ACTIVE, Gender.MALE, "UserType.MEMBER", "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")),
 				new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.OTHER, "UserType.OWNER", "Nam Tu Liem", new Date(), List.of("ABC", "XYZ"))));
 	}
 
