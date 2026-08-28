@@ -2,12 +2,16 @@ package vn.cnf166.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import vn.cnf166.dto.request.UserRequestDTO;
 import vn.cnf166.dto.response.ResponseData;
+import vn.cnf166.dto.response.ResponseError;
 import vn.cnf166.dto.response.ResponseSuccess;
+import vn.cnf166.exception.ResourceNotFoundException;
+import vn.cnf166.service.UserService;
 import vn.cnf166.util.Gender;
 import vn.cnf166.util.UserStatus;
 
@@ -25,11 +29,18 @@ public class UserController {
 //	public ResponseSuccess addUser(@Valid @RequestBody UserRequestDTO userDTO) {
 //		return new ResponseSuccess(HttpStatus.CREATED, "Added user successfully!", 1);
 //	}
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/add")
 	//@RequestMapping(method = RequestMethod.POST, path = "/", headers = "apiKey=v1.0")
 	public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
-		return new ResponseData<>(HttpStatus.CREATED.value(), "Added user successfully!", 1);
+		try {
+			userService.addUser(userDTO);
+			return new ResponseData<>(HttpStatus.CREATED.value(), "Added user successfully!", 1);
+		} catch (ResourceNotFoundException e) {
+			return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Saved fail!");
+		}
 	}
 
 
