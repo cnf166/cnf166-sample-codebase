@@ -61,8 +61,8 @@ public class UserController {
 	@GetMapping("/users_list")
 	public ResponseData<?> getAllUserList(
 			@RequestParam(required = false) String phone,
-			@RequestParam(defaultValue = "1") int pageNumber,
-			@RequestParam(defaultValue = "20") int pageSize) {
+			@Min(1) @RequestParam(defaultValue = "1") int pageNumber,
+			@Min(20) @RequestParam(defaultValue = "20") int pageSize) {
 		System.out.println("Request get all users: ");
 		return new ResponseData<>(HttpStatus.OK.value(), "Get users: ", List.of(new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.ACTIVE, Gender.MALE, "UserType.MEMBER", "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")),
 				new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.OTHER, "UserType.OWNER", "Nam Tu Liem", new Date(), List.of("ABC", "XYZ"))));

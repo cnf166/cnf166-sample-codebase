@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Date;
 
@@ -34,6 +35,23 @@ public class GlobalExceptionHandler {
 		}
 
 		errorResponse.setMessage(message);
+
+		return errorResponse;
+	}
+
+	@ExceptionHandler({MethodArgumentTypeMismatchException.class})
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public ErrorResponse handlingInternalServerErrorException(Exception e, WebRequest request) {
+		ErrorResponse errorResponse = new ErrorResponse();
+		errorResponse.setTimestamp(new Date());
+		errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		errorResponse.setPath(request.getDescription(false).replace("uri=", ""));
+		errorResponse.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+
+		//handling message
+		if (e instanceof MethodArgumentTypeMismatchException) {
+			errorResponse.setMessage("Failed to convert value of type");
+		}
 
 		return errorResponse;
 	}
