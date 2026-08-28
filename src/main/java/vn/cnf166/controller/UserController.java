@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import vn.cnf166.dto.request.UserRequestDTO;
 import vn.cnf166.dto.response.ResponseData;
 import vn.cnf166.dto.response.ResponseError;
-import vn.cnf166.dto.response.ResponseSuccess;
 import vn.cnf166.exception.ResourceNotFoundException;
 import vn.cnf166.service.UserService;
 import vn.cnf166.util.Gender;
