@@ -34,7 +34,7 @@ public class UserController {
 
 
 	@PutMapping("/{userId}")
-	public ResponseData<?> updateUser(@PathVariable int userId, @RequestBody UserRequestDTO userDTO) {
+	public ResponseData<?> updateUser(@Min(1) @PathVariable int userId, @Valid @RequestBody UserRequestDTO userDTO) {
 		System.out.println("Update user with userid = " + userId);
 		return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Updated user successfully!");
 	}

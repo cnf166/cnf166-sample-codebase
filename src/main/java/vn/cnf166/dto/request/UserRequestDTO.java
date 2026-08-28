@@ -34,6 +34,8 @@ public class UserRequestDTO implements Serializable {
 	@NotNull(message = "addresses can not empty")
 	private String address;
 
+	// Đối với enum, chỉ bắt được exception khi ta xử lí như này --> còn đâu với enum bth (có/k có subset) thì xử lí
+	// theo cách khác
 	@NotNull(message = "type must be not null")
 	@EnumValue(name = "type", enumClass = UserType.class)
 	private String userType;
