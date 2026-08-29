@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import vn.cnf166.configuration.Translator;
 import vn.cnf166.dto.request.UserRequestDTO;
 import vn.cnf166.dto.response.ResponseData;
 import vn.cnf166.dto.response.ResponseError;
@@ -36,17 +37,16 @@ public class UserController {
 	public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
 		try {
 			userService.addUser(userDTO);
-			return new ResponseData<>(HttpStatus.CREATED.value(), "Added user successfully!", 1);
+			return new ResponseData<>(HttpStatus.CREATED.value(), Translator.toLocale("user.add.success"), 1);
 		} catch (ResourceNotFoundException e) {
 			return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Saved fail!");
 		}
 	}
 
-
 	@PutMapping("/{userId}")
 	public ResponseData<?> updateUser(@Min(1) @PathVariable int userId, @Valid @RequestBody UserRequestDTO userDTO) {
 		System.out.println("Update user with userid = " + userId);
-		return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Updated user successfully!");
+		return new ResponseData<>(HttpStatus.ACCEPTED.value(), Translator.toLocale("user.upd.success"));
 	}
 
 	@PatchMapping("/{userId}")
