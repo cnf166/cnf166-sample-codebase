@@ -1,0 +1,7 @@
+open:
+  api:
+    title: API document
+    version: v1.0.0
+    description: This is the OpenAPI swagger for some specific API endpoints
+    serverUrl: http://localhost:8080
+    serverName: Demo Server
