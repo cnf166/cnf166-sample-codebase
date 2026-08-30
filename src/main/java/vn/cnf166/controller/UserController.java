@@ -1,5 +1,6 @@
 package vn.cnf166.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -34,6 +35,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@Operation(summary = "Add user by id", description = "API will add or create a new user")
 	@PostMapping("/add")
 	//@RequestMapping(method = RequestMethod.POST, path = "/", headers = "apiKey=v1.0")
 	public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
@@ -45,12 +47,14 @@ public class UserController {
 		}
 	}
 
+	@Operation(summary = "Update user by id", description = "API will update an user")
 	@PutMapping("/{userId}")
 	public ResponseData<?> updateUser(@Min(1) @PathVariable int userId, @Valid @RequestBody UserRequestDTO userDTO) {
 		System.out.println("Update user with userid = " + userId);
 		return new ResponseData<>(HttpStatus.ACCEPTED.value(), Translator.toLocale("user.upd.success"));
 	}
 
+	@Operation(summary = "Change detail in user by id", description = "API will change the detail of an user")
 	@PatchMapping("/{userId}")
 	public ResponseData<?> changeStatusUser(@Min(1) @PathVariable int userId, @Min(1) @RequestParam(required = false) boolean status) //required = false --> non-mandatory
 	{
@@ -58,18 +62,21 @@ public class UserController {
 		return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Change status user successfully!");
 	}
 
+	@Operation(summary = "Delete user by id", description = "API will delete an user")
 	@DeleteMapping("/{userId}")
 	public ResponseData<?> deleteUser(@Min(1) @PathVariable int userId) {
 		System.out.println("Delete user with userId = " + userId);
 		return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete user successfully");
 	}
 
+	@Operation(summary = "Get user by id", description = "API will return an user by id")
 	@GetMapping("/{userId}")
 	public ResponseData<?> getUser(@PathVariable int userId) {
 		System.out.println("Request get user by userId: " + userId);
 		return new ResponseData<>(HttpStatus.OK.value(), "Get user by id: ", new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.FEMALE, "",  "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")));
 	}
 
+	@Operation(summary = "Get user list per page", description = "API will return a list of users based on page number & page size")
 	@GetMapping("/users_list")
 	public ResponseData<?> getAllUserList(
 			@RequestParam(required = false) String phone,
