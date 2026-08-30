@@ -1,5 +1,6 @@
 package vn.cnf166.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Validated
+@Tag(name = "User Controller")
 public class UserController {
 
 	// Response based on ResponseEntity
