@@ -23,7 +23,7 @@ public class OpenApiConfig {
 		return new OpenAPI().info(new Info().title(title)
 				.version(version)
 				.description(description)
-				.license(new License().name("API License").url("https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1")))
+				.license(new License().name("API License").url("https://hihi")))
 				.servers(List.of(new Server().url(serverUrl).description(serverName)));
 	}
 
