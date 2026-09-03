@@ -8,10 +8,12 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
 @Configuration
+@Profile("-prod")
 public class OpenApiConfig {
 
 	@Bean
@@ -28,6 +30,7 @@ public class OpenApiConfig {
 	}
 
 	@Bean
+	// @Profile("-prod") --> cung oke
 	public GroupedOpenApi groupedOpenApi() {
 		return GroupedOpenApi.builder()
 				.group("api-service")
