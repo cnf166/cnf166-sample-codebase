@@ -60,4 +60,14 @@ public class User extends AbstractEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
 	private Set<Address> addresses = new HashSet<>();
+
+	public void saveAddress(Address address) {
+		if (address != null) {
+			if (addresses == null) {
+				addresses = new HashSet<>(); // k bi nullpointer
+			}
+			addresses.add(address);
+			address.setUser(this); // save user_id
+		}
+	}
 }

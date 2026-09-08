@@ -8,6 +8,7 @@ import vn.cnf166.util.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import static vn.cnf166.util.Gender.*;
 
@@ -25,14 +26,20 @@ public class UserRequestDTO implements Serializable {
 	@PhoneNumber
 	private String phone;
 
+	@NotNull
+	private String username;
+
+	@NotNull
+	private String password;
+
 	@EnumPattern(name = "status", regexp = "ACTIVE|INACTIVE|NONE", message = "status invalid format")
 	private UserStatus status;
 
 	@GenderSubset(anyOf = {MALE, FEMALE, OTHER})
 	private Gender gender;
 
-	@NotNull(message = "addresses can not empty")
-	private String address;
+	@NotEmpty(message = "addresses can not empty")
+	private Set<AddressDTO> addresses;
 
 	// Đối với enum, chỉ bắt được exception khi ta xử lí như này --> còn đâu với enum bth (có/k có subset) thì xử lí
 	// theo cách khác
@@ -45,23 +52,13 @@ public class UserRequestDTO implements Serializable {
 	@JsonFormat(pattern = "MM/dd/yyyy")
 	private Date dateOfBirth;
 
-	@NotEmpty
-	List<String> role;
 
 	public UserRequestDTO() {
 	}
 
-	public UserRequestDTO(String firstName, String lastName, String email, String phone, UserStatus status, Gender gender, String userType, String address, Date dateOfBirth, List<String> role) {
+	public UserRequestDTO(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.email = email;
-		this.phone = phone;
-		this.status = status;
-		this.gender = gender;
-		this.userType = userType;
-		this.address = address;
-		this.dateOfBirth = dateOfBirth;
-		this.role = role;
 	}
 
 	public String getFirstName() {
@@ -96,12 +93,12 @@ public class UserRequestDTO implements Serializable {
 		this.phone = phone;
 	}
 
-	public String getAddress() {
-		return address;
+	public Set<AddressDTO> getAddresses() {
+		return addresses;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAddresses(Set<AddressDTO> addresses) {
+		this.addresses = addresses;
 	}
 
 	public Date getDateOfBirth() {
@@ -110,14 +107,6 @@ public class UserRequestDTO implements Serializable {
 
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
-	}
-
-	public List<String> getRole() {
-		return role;
-	}
-
-	public void setRole(List<String> role) {
-		this.role = role;
 	}
 
 	public UserStatus getStatus() {
@@ -142,5 +131,21 @@ public class UserRequestDTO implements Serializable {
 
 	public void setUserType(String userType) {
 		this.userType = userType;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +25,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Validated
+@Slf4j
 @Tag(name = "User Controller")
+@RequiredArgsConstructor
 public class UserController {
 
 	// Response based on ResponseEntity
@@ -32,17 +36,19 @@ public class UserController {
 //	public ResponseSuccess addUser(@Valid @RequestBody UserRequestDTO userDTO) {
 //		return new ResponseSuccess(HttpStatus.CREATED, "Added user successfully!", 1);
 //	}
-	@Autowired
-	private UserService userService;
+
+	private final UserService userService;
 
 	@Operation(summary = "Add user by id", description = "API will add or create a new user")
 	@PostMapping("/add")
 	//@RequestMapping(method = RequestMethod.POST, path = "/", headers = "apiKey=v1.0")
-	public ResponseData<Integer> addUser(@Valid @RequestBody UserRequestDTO userDTO) {
+	public ResponseData<Long> addUser(@Valid @RequestBody UserRequestDTO user) {
+		log.info("Request add user, {} {}", user.getFirstName(), user.getLastName());
 		try {
-			userService.addUser(userDTO);
-			return new ResponseData<>(HttpStatus.CREATED.value(), Translator.toLocale("user.add.success"), 1);
-		} catch (ResourceNotFoundException e) {
+			long userId = userService.saveUser(user);
+			return new ResponseData<>(HttpStatus.CREATED.value(), Translator.toLocale("user.add.success"), userId);
+		} catch (Exception e) {
+			log.error("error message={}", e.getMessage(), e.getCause());
 			return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Saved fail!");
 		}
 	}
@@ -73,7 +79,7 @@ public class UserController {
 	@GetMapping("/{userId}")
 	public ResponseData<?> getUser(@PathVariable int userId) {
 		System.out.println("Request get user by userId: " + userId);
-		return new ResponseData<>(HttpStatus.OK.value(), "Get user by id: ", new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.FEMALE, "",  "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")));
+		return new ResponseData<>(HttpStatus.OK.value(), "Get user by id: ", new UserRequestDTO("Viet Anh", "Nguyen Viet Anh"));
 	}
 
 	@Operation(summary = "Get user list per page", description = "API will return a list of users based on page number & page size")
@@ -83,8 +89,8 @@ public class UserController {
 			@Min(1) @RequestParam(defaultValue = "1") int pageNumber,
 			@Min(20) @RequestParam(defaultValue = "20") int pageSize) {
 		System.out.println("Request get all users: ");
-		return new ResponseData<>(HttpStatus.OK.value(), "Get users: ", List.of(new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.ACTIVE, Gender.MALE, "UserType.MEMBER", "Nam Tu Liem", new Date(), List.of("ABC", "XYZ")),
-				new UserRequestDTO("Viet Anh", "Nguyen Viet Anh", "nguyenvietanh166.fw@gmail.com", "0912xxxxxx", UserStatus.NONE, Gender.OTHER, "UserType.OWNER", "Nam Tu Liem", new Date(), List.of("ABC", "XYZ"))));
+		return new ResponseData<>(HttpStatus.OK.value(), "Get users: ", List.of(new UserRequestDTO("Viet Anh", "Nguyen Viet Anh"),
+				new UserRequestDTO("Viet Anh", "Nguyen Viet Anh")));
 	}
 
 }

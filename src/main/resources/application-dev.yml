@@ -16,7 +16,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
     hibernate:
-        ddl-auto: none
+      ddl-auto: none
+    open-in-view: false
 
 springdoc:
   api-docs:

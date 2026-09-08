@@ -25,9 +25,11 @@ public class GlobalExceptionHandler {
 		// handling message & error
 		String message = e.getMessage();
 		if (e instanceof MethodArgumentNotValidException) {
-			int startIndexMessage = message.lastIndexOf("[");
-			int endIndexMessage = message.lastIndexOf("]");
-			message = message.substring(startIndexMessage + 1, endIndexMessage - 1);
+//			int startIndexMessage = message.lastIndexOf("[");
+//			int endIndexMessage = message.lastIndexOf("]");
+//			message = message.substring(startIndexMessage + 1, endIndexMessage - 1);
+
+			errorResponse.setMessage(message);
 			errorResponse.setError("Payload invalid!");
 		} else if (e instanceof ConstraintViolationException) {
 			message = message.substring(message.indexOf(" ") + 1);
