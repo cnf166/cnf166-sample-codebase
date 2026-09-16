@@ -4,9 +4,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import vn.cnf166.dto.request.AddressDTO;
 import vn.cnf166.dto.request.UserRequestDTO;
 import vn.cnf166.dto.response.UserDetailResponse;
+import vn.cnf166.exception.ResourceNotFoundException;
 import vn.cnf166.model.Address;
 import vn.cnf166.model.User;
 import vn.cnf166.repository.UserRepository;
@@ -70,22 +72,51 @@ public class UserServiceImpl implements UserService {
 	}
 	@Override
 	public void updateUser(long userId, UserRequestDTO request) {
-
+		User user = getUserById(userId);
+		user.setFirstName(request.getFirstName());
+		user.setLastName(request.getLastName());
+		user.setDateOfBirth(request.getDateOfBirth());
+		user.setGender(request.getGender());
+		user.setPhone(request.getPhone());
+		if (!request.getEmail().equals(user.getEmail())) {
+			// check if email from database if not exist then allow update email, otherwise will throw exception
+			user.setEmail(request.getEmail());
+		}
+		if (StringUtils.hasLength(request.getUsername())) {
+			// check if username from database if not exist then allow update
+			user.setUsername(request.getUsername());
+		}
+		user.setPassword(request.getPassword());
+		user.setStatus(request.getStatus());
+		user.setType(UserType.valueOf(request.getUserType()));
+		user.setAddresses(convertToAddress(request.getAddresses()));
+		userRepository.save(user);
+		log.info("User updated successfully!");
 	}
 
 	@Override
 	public void changeStatus(long userId, UserStatus status) {
-
+		User user = getUserById(userId);
+		user.setStatus(status);
+		userRepository.save(user);
+		log.info("Changed status successfully!");
 	}
 
 	@Override
 	public void deleteUser(long userId) {
-
+		userRepository.deleteById(userId);
+		log.info("Delete user successfully!");
 	}
 
 	@Override
 	public UserDetailResponse getUser(long userId) {
-		return null;
+		User user = getUserById(userId);
+		return UserDetailResponse.builder()
+				.firstName(user.getFirstName())
+				.lastName(user.getLastName())
+				.phone(user.getPhone())
+				.email(user.getPhone())
+				.build();
 	}
 
 	@Override
@@ -110,4 +141,7 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	private User getUserById(long userId) {
+		return userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	}
 }
