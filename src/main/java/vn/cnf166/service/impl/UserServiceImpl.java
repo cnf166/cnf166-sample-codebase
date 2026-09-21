@@ -3,6 +3,9 @@ package vn.cnf166.service.impl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vn.cnf166.dto.request.AddressDTO;
@@ -121,7 +124,23 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDetailResponse> getAllUsers(int pageNumber, int pageSize) {
-		return List.of();
+		// set up query pageNumber 1 still oke (= 0), Spring boot setting with = 0 by default in configuration
+		int p = 0;
+		if (pageNumber > 0) {
+			p = pageNumber - 1;
+		}
+
+		// only want one particular portion of the users
+		Pageable pageable = PageRequest.of(p, pageSize);
+		Page<User> users = userRepository.findAll(pageable);
+
+		// mapping DTO to list
+		return users.stream().map(user -> UserDetailResponse.builder()
+						.firstName(user.getFirstName())
+						.lastName(user.getLastName())
+						.phone(user.getPhone())
+						.email(user.getEmail())
+						.build()).toList();
 	}
 
 	private Set<Address> convertToAddress(Set<AddressDTO> addresses) {
