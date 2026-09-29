@@ -67,9 +67,9 @@ public class UserController {
 		}
 	}
 
-	@Operation(summary = "Change detail in user by id", description = "API will change the detail of an user")
+	@Operation(summary = "Change status of an user by id", description = "API will change the status of an user by querying through id")
 	@PatchMapping("/{userId}")
-	public ResponseData<?> changeStatusUser(@Min(1) @PathVariable long userId, @Min(1) @RequestParam(required = false) UserStatus status) //required = false --> non-mandatory
+	public ResponseData<?> changeStatusUser(@Min(1) @PathVariable long userId, @RequestParam(required = false) UserStatus status) //required = false --> non-mandatory
 	{
 		System.out.println("Change status user with userId =" + userId);
 		try {
