@@ -91,8 +91,15 @@ public class UserServiceImpl implements UserService {
 		}
 		user.setPassword(request.getPassword());
 		user.setStatus(request.getStatus());
-		user.setType(UserType.valueOf(request.getUserType()));
-		user.setAddresses(convertToAddress(request.getAddresses()));
+		user.setType(UserType.valueOf(request.getUserType().toUpperCase()));
+
+		//Update address both user(s) and address(es).
+		if (request.getAddresses() != null) {
+			Set<Address> addresses = convertToAddress(request.getAddresses(), user);
+			user.setAddresses(addresses);
+		}
+
+		//user.setAddresses(convertToAddress(request.getAddresses(), user));
 		userRepository.save(user);
 		log.info("User updated successfully!");
 	}
@@ -143,20 +150,23 @@ public class UserServiceImpl implements UserService {
 						.build()).toList();
 	}
 
-	private Set<Address> convertToAddress(Set<AddressDTO> addresses) {
+	private Set<Address> convertToAddress(Set<AddressDTO> addresses, User user) {
 		Set<Address> result = new HashSet<>();
-		addresses.forEach(a ->
-				result.add(Address.builder()
-						.apartmentNumber(a.getApartmentNumber())
-						.floor(a.getFloor())
-						.building(a.getBuilding())
-						.streetNumber(a.getStreetNumber())
-						.street(a.getStreet())
-						.city(a.getCity())
-						.country(a.getCountry())
-						.addressType(a.getAddressType())
-						.build())
-		);
+		addresses.forEach(a -> {
+			Address address = Address.builder()
+					.apartmentNumber(a.getApartmentNumber())
+					.floor(a.getFloor())
+					.building(a.getBuilding())
+					.streetNumber(a.getStreetNumber())
+					.street(a.getStreet())
+					.city(a.getCity())
+					.country(a.getCountry())
+					.addressType(a.getAddressType())
+					.build();
+			address.setUser(user);
+
+			result.add(address);
+		});
 		return result;
 	}
 
