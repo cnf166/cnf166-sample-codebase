@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import vn.cnf166.dto.request.AddressDTO;
@@ -130,7 +131,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserDetailResponse> getAllUsers(int pageNumber, int pageSize) {
+	public List<UserDetailResponse> getAllUsers(int pageNumber, int pageSize, String sortBy) {
 		// set up query pageNumber 1 still oke (= 0), Spring boot setting with = 0 by default in configuration
 		int p = 0;
 		if (pageNumber > 0) {
@@ -138,7 +139,7 @@ public class UserServiceImpl implements UserService {
 		}
 
 		// only want one particular portion of the users
-		Pageable pageable = PageRequest.of(p, pageSize);
+		Pageable pageable = PageRequest.of(p, pageSize, Sort.by(Sort.Direction.ASC, sortBy));
 		Page<User> users = userRepository.findAll(pageable);
 
 		// mapping DTO to list

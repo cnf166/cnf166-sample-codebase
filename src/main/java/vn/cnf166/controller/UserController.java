@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +16,8 @@ import vn.cnf166.dto.response.ResponseError;
 import vn.cnf166.dto.response.UserDetailResponse;
 import vn.cnf166.exception.ResourceNotFoundException;
 import vn.cnf166.service.UserService;
-import vn.cnf166.util.Gender;
 import vn.cnf166.util.UserStatus;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -111,9 +108,10 @@ public class UserController {
 	@GetMapping("/users_list")
 	public ResponseData<List<UserDetailResponse>> getAllUserList(
 			@Min(1) @RequestParam(defaultValue = "1") int pageNumber,
-			@Min(20) @RequestParam(defaultValue = "20") int pageSize) {
+			@Min(20) @RequestParam(defaultValue = "20") int pageSize,
+			@RequestParam(required = false) String sortBy) {
 		System.out.println("Request get all users: ");
-		return new ResponseData<>(HttpStatus.OK.value(), "Get users: ", userService.getAllUsers(pageNumber, pageSize));
+		return new ResponseData<>(HttpStatus.OK.value(), "Get users: ", userService.getAllUsers(pageNumber, pageSize, sortBy));
 	}
 
 }

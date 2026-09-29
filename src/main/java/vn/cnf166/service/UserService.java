@@ -20,6 +20,6 @@ public interface UserService {
 
 	UserDetailResponse getUser(long userId);
 
-	List<UserDetailResponse> getAllUsers(int pageNumber, int pageSize);
+	List<UserDetailResponse> getAllUsers(int pageNumber, int pageSize, String sortBy);
 
 }
